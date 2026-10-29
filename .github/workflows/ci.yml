@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   test:
-    name: Validate Application
+    name: Validate and Test Application
     runs-on: ubuntu-latest
 
     steps:
@@ -29,8 +29,10 @@ jobs:
           test -f css/style.css
           test -f tests/app.test.js
 
-      - name: Validate HTML and JavaScript files
-        run: |
-          find . -type f -name "*.html" -print
-          find js tests -type f -name "*.js" -print
-          echo "Required application files are present."
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run application tests
+        run: node --test tests/app.test.js
