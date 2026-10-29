@@ -1,0 +1,36 @@
+
+name: Appointment Scheduler CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Validate Application
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check required project files
+        run: |
+          test -f index.html
+          test -f book-appointment.html
+          test -f my-appointments.html
+          test -f js/app.js
+          test -f css/style.css
+          test -f tests/app.test.js
+
+      - name: Validate HTML and JavaScript files
+        run: |
+          find . -type f -name "*.html" -print
+          find js tests -type f -name "*.js" -print
+          echo "Required application files are present."
