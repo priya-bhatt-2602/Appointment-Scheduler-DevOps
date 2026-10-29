@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Agile Academic Appointment Scheduler - CSE706 Agile Scrum Project (SCRUM-1)"/>
+  <title>Appointment Scheduler • Academic Portal</title>
+
+  <!-- Google Fonts: Inter & Material Symbols Outlined -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+
+  <!-- Tailwind CDN & Theme Config (Matches agile_academic_scheduler/DESIGN.md) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface": "#f8f9ff",
+            "surface-dim": "#cbdbf5",
+            "surface-bright": "#f8f9ff",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#eff4ff",
+            "surface-container": "#e5eeff",
+            "surface-container-high": "#dce9ff",
+            "surface-container-highest": "#d3e4fe",
+            "surface-variant": "#d3e4fe",
+            "background": "#f8f9ff",
+            "on-surface": "#0b1c30",
+            "on-surface-variant": "#434655",
+            "on-background": "#0b1c30",
+            "inverse-surface": "#213145",
+            "inverse-on-surface": "#eaf1ff",
+            "outline": "#737686",
+            "outline-variant": "#c3c6d7",
+            "primary": "#004ac6",
+            "primary-container": "#2563eb",
+            "on-primary": "#ffffff",
+            "on-primary-container": "#eeefff",
+            "primary-fixed": "#dbe1ff",
+            "primary-fixed-dim": "#b4c5ff",
+            "on-primary-fixed": "#00174b",
+            "on-primary-fixed-variant": "#003ea8",
+            "surface-tint": "#0053db",
+            "secondary": "#565e74",
+            "on-secondary": "#ffffff",
+            "secondary-container": "#dae2fd",
+            "on-secondary-container": "#5c647a",
+            "secondary-fixed": "#dae2fd",
+            "secondary-fixed-dim": "#bec6e0",
+            "on-secondary-fixed": "#131b2e",
+            "on-secondary-fixed-variant": "#3f465c",
+            "tertiary": "#006243",
+            "tertiary-container": "#007d57",
+            "on-tertiary": "#ffffff",
+            "on-tertiary-container": "#bdffdc",
+            "tertiary-fixed": "#85f8c4",
+            "tertiary-fixed-dim": "#68dba9",
+            "on-tertiary-fixed": "#002114",
+            "on-tertiary-fixed-variant": "#005137",
+            "error": "#ba1a1a",
+            "error-container": "#ffdad6",
+            "on-error": "#ffffff",
+            "on-error-container": "#93000a"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          spacing: {
+            "gutter": "1rem",
+            "gutter-desktop": "1.5rem",
+            "margin": "1rem",
+            "margin-tablet": "1.5rem",
+            "margin-desktop": "2rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2rem"
+          },
+          fontFamily: {
+            sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Core Stylesheet -->
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body class="bg-background text-on-surface antialiased min-h-screen flex flex-col font-sans">
+
+  <!-- ======================================================================
+       GLOBAL HEADER & NAVIGATION (Shared Shell)
+       ====================================================================== -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest/95 backdrop-blur-md border-b border-outline-variant/40 shadow-xs" id="app-header">
+    <div class="h-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-space-md">
+      
+      <!-- Brand & Project Identity -->
+      <a href="#home" class="flex items-center gap-space-md cursor-pointer group" data-navigate="home" aria-label="Go to Home Dashboard">
+        <img alt="Appointment Scheduler Logo" class="h-8 w-auto object-contain transition-transform group-hover:scale-105" src="https://lh3.googleusercontent.com/aida/AEtjO1VLrk2C6je1RQFRTa_hnDxO0hLIkBvbRqrqlolPHo4ncK6_znN6IVKJkjdKrUkPjV4on2bbBezPNUKD_0iMs2E5g8HhijjgyKOj75XpRcBQLQra0c3z3uttscxUVh_Sij-GK22qRUnnvPL9RIVCxKvcUFTCh2LjOnkTj66B4xayXWP7sjZMt8MNHwgdjQ0MQZGZbZ9VZFLcHJeF7hFwvAUsAxfMFGpAI7l1kzYcC0oQg5T8i3Fye1IQ0zT2"/>
+        <div class="flex items-center gap-space-sm">
+          <span class="text-lg font-bold text-on-surface tracking-tight">Appointment Scheduler</span>
+          <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-surface-container-high text-primary">Campus Portal</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Shell Links -->
+      <nav class="hidden md:flex items-center gap-space-xs" id="main-nav" aria-label="Main Navigation">
+        <a class="nav-item px-3 py-1.5 transition-colors text-sm font-medium rounded-lg" data-target="home" href="#home">Home</a>
+        <a class="nav-item px-3 py-1.5 transition-colors text-sm font-medium rounded-lg" data-target="book-appointment" href="#book-appointment">Book Appointment</a>
+        <a class="nav-item px-3 py-1.5 transition-colors text-sm font-medium rounded-lg" data-target="my-appointments" href="#my-appointments">My Appointments</a>
+      </nav>
+
+      <!-- User Profile & Mobile Menu Toggle -->
+      <div class="flex items-center gap-space-md">
+        <div class="hidden sm:flex flex-col text-right">
+          <span class="text-xs font-semibold text-on-surface leading-tight">Alex Morgan</span>
+          <span class="text-[11px] text-on-surface-variant leading-none">Student Portal • Sprint 3</span>
+        </div>
+        <div class="relative cursor-pointer" title="Student Profile (SSO Active)">
+          <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary">
+            <span class="material-symbols-outlined text-[18px]">person</span>
+          </div>
+          <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-tertiary ring-2 ring-surface-container-lowest" title="Active"></span>
+        </div>
+
+        <!-- Mobile Navigation Menu Toggle Button -->
+        <button class="md:hidden p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors" id="mobile-menu-btn" aria-label="Toggle navigation menu">
+          <span class="material-symbols-outlined text-[24px]">menu</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Dropdown -->
+    <div class="hidden md:hidden px-4 pb-4 pt-2 bg-surface-container-lowest border-b border-outline-variant/40 flex flex-col gap-1.5" id="mobile-nav">
+      <a class="mobile-nav-item px-3 py-2 rounded-lg text-sm font-medium transition-colors" data-target="home" href="#home">Home Dashboard</a>
+      <a class="mobile-nav-item px-3 py-2 rounded-lg text-sm font-medium transition-colors" data-target="book-appointment" href="#book-appointment">Book Appointment</a>
+      <a class="mobile-nav-item px-3 py-2 rounded-lg text-sm font-medium transition-colors" data-target="my-appointments" href="#my-appointments">My Appointments</a>
+    </div>
+  </header>
+
+  <!-- ======================================================================
+       MAIN CONTENT CONTAINER (View Router Shell)
+       ====================================================================== -->
+  <main class="w-full pt-16 flex-1 bg-background" id="app-main">
+
+    <!-- ==================================================================
+         VIEW 1: HOME DASHBOARD (Reference: home_dashboard/code.html)
+         ================================================================== -->
+    <section class="view-section" id="view-home">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[calc(100vh-8rem)]">
+        <div class="flex flex-col w-full space-y-10">
+
+          <!-- Welcome Banner / Agile Cockpit Bar -->
+          <div class="relative overflow-hidden rounded-xl bg-surface-container-lowest p-6 sm:p-8 shadow-sm">
+            <div class="absolute -right-16 -top-16 w-80 h-80 rounded-full bg-primary-fixed/30 blur-3xl pointer-events-none"></div>
+            <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+              <div class="max-w-2xl space-y-2">
+                <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-surface-container text-primary">
+                  <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                  <span class="text-xs font-semibold uppercase tracking-wider">Sprint 3 • Academic Portal Active</span>
+                </div>
+                <h1 class="text-3xl sm:text-4xl font-bold text-on-surface tracking-tight">Welcome back, Alex!</h1>
+                <p class="text-base sm:text-lg text-on-surface-variant max-w-xl">
+                  Easily book, track, and manage your campus and student appointments in one place. Keep your sprint velocity and wellness in check.
+                </p>
+              </div>
+              <div class="flex flex-wrap sm:flex-nowrap items-center gap-3">
+                <a class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-primary-container text-on-primary font-semibold text-sm shadow-md hover:bg-primary transition-all duration-150 active:scale-95 cursor-pointer" data-navigate="book-appointment" href="#book-appointment">
+                  <span>Book Appointment</span>
+                  <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+                </a>
+                <a class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-surface-container text-on-surface font-semibold text-sm hover:bg-surface-container-high transition-all duration-150 cursor-pointer" data-navigate="my-appointments" href="#my-appointments">
+                  <span class="material-symbols-outlined text-[20px] text-secondary">calendar_month</span>
+                  <span>View My Schedule</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Summary Stats Metric Modules -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Card 1: Scheduled -->
+            <div class="rounded-xl bg-surface-container-lowest p-6 shadow-sm flex flex-col justify-between">
+              <div class="flex items-start justify-between">
+                <div class="space-y-1">
+                  <span class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Scheduled Syncs</span>
+                  <p class="text-2xl font-bold text-on-surface">2 Scheduled</p>
+                </div>
+                <div class="w-11 h-11 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+                  <span class="material-symbols-outlined text-[24px]">event_upcoming</span>
+                </div>
+              </div>
+              <div class="mt-6 pt-4 bg-surface-container-low -mx-6 -mb-6 p-4 rounded-b-xl flex items-center gap-3">
+                <span class="w-2 h-2 rounded-full bg-primary flex-shrink-0"></span>
+                <div class="min-w-0 flex-1">
+                  <p class="text-xs font-semibold text-on-surface truncate">Mentoring with Prof. Davis</p>
+                  <p class="text-xs text-on-surface-variant">Tomorrow, 2:00 PM • Eng Hall 3B</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2: Completed Sessions -->
+            <div class="rounded-xl bg-surface-container-lowest p-6 shadow-sm flex flex-col justify-between">
+              <div class="flex items-start justify-between">
+                <div class="space-y-1">
+                  <span class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Completed Sessions</span>
+                  <p class="text-2xl font-bold text-on-surface">8 Completed</p>
+                </div>
+                <div class="w-11 h-11 rounded-lg bg-tertiary-fixed/40 flex items-center justify-center text-tertiary">
+                  <span class="material-symbols-outlined text-[24px]">check_circle</span>
+                </div>
+              </div>
+              <div class="mt-6 pt-4 bg-surface-container-low -mx-6 -mb-6 p-4 rounded-b-xl flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-secondary text-[16px]">history</span>
+                  <p class="text-xs text-on-surface-variant">Last: Oct 12 • Advising</p>
+                </div>
+                <span class="px-2 py-0.5 rounded-full bg-surface-container text-xs text-on-surface-variant font-medium">100% Attendance</span>
+              </div>
+            </div>
+
+            <!-- Card 3: Directory Categories -->
+            <div class="rounded-xl bg-surface-container-lowest p-6 shadow-sm flex flex-col justify-between">
+              <div class="flex items-start justify-between">
+                <div class="space-y-1">
+                  <span class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Directory</span>
+                  <p class="text-2xl font-bold text-on-surface">3 Categories</p>
+                </div>
+                <div class="w-11 h-11 rounded-lg bg-surface-container-high flex items-center justify-center text-primary">
+                  <span class="material-symbols-outlined text-[24px]">category</span>
+                </div>
+              </div>
+              <div class="mt-6 pt-4 bg-surface-container-low -mx-6 -mb-6 p-4 rounded-b-xl flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="p-1 rounded bg-surface-container-lowest text-primary material-symbols-outlined text-[16px]">stethoscope</span>
+                  <span class="p-1 rounded bg-surface-container-lowest text-primary material-symbols-outlined text-[16px]">school</span>
+                  <span class="p-1 rounded bg-surface-container-lowest text-primary material-symbols-outlined text-[16px]">content_cut</span>
+                </div>
+                <span class="text-xs text-primary font-semibold">Ready for booking</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Next 2 Appointments: Quick Preview Strip -->
+          <div class="rounded-xl bg-surface-container-lowest p-6 shadow-sm space-y-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h2 class="text-lg font-bold text-on-surface tracking-tight">Next on Your Agenda</h2>
+                <p class="text-xs text-on-surface-variant">Upcoming scheduled campus appointments in the current sprint</p>
+              </div>
+              <a class="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:text-on-primary-fixed-variant transition-colors cursor-pointer" data-navigate="my-appointments" href="#my-appointments">
+                <span>View Full Schedule</span>
+                <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+              </a>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Item 1: Mentoring -->
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 rounded-lg bg-primary text-on-primary flex flex-col items-center justify-center flex-shrink-0">
+                    <span class="text-[10px] font-bold uppercase leading-none">Tomorrow</span>
+                    <span class="text-lg font-bold leading-none mt-1">14</span>
+                  </div>
+                  <div>
+                    <div class="inline-flex items-center gap-2 mb-0.5">
+                      <span class="px-2 py-0.5 rounded-full bg-primary-fixed text-xs font-semibold text-on-primary-fixed-variant">Academic</span>
+                      <span class="text-xs text-on-surface-variant">2:00 PM • 45 mins</span>
+                    </div>
+                    <h3 class="text-sm font-semibold text-on-surface">Mentoring Session</h3>
+                    <p class="text-xs text-on-surface-variant">Prof. Arthur Davis • Engineering Hall 3B</p>
+                  </div>
+                </div>
+                <button class="self-start sm:self-center px-3 py-1.5 rounded-lg bg-surface-container-lowest text-primary text-xs font-semibold shadow-sm hover:bg-primary hover:text-on-primary transition-colors cursor-pointer" onclick="navigateTo('my-appointments')">
+                  View Details
+                </button>
+              </div>
+
+              <!-- Item 2: Styling -->
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 rounded-lg bg-secondary text-on-secondary flex flex-col items-center justify-center flex-shrink-0">
+                    <span class="text-[10px] font-bold uppercase leading-none">Fri</span>
+                    <span class="text-lg font-bold leading-none mt-1">17</span>
+                  </div>
+                  <div>
+                    <div class="inline-flex items-center gap-2 mb-0.5">
+                      <span class="px-2 py-0.5 rounded-full bg-surface-container-high text-xs font-semibold text-secondary">Lifestyle</span>
+                      <span class="text-xs text-on-surface-variant">10:30 AM • 30 mins</span>
+                    </div>
+                    <h3 class="text-sm font-semibold text-on-surface">Hair Styling & Grooming</h3>
+                    <p class="text-xs text-on-surface-variant">Studio Stylist • Union Suite 12</p>
+                  </div>
+                </div>
+                <button class="self-start sm:self-center px-3 py-1.5 rounded-lg bg-surface-container-lowest text-primary text-xs font-semibold shadow-sm hover:bg-primary hover:text-on-primary transition-colors cursor-pointer" onclick="navigateTo('my-appointments')">
+                  View Details
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Available Services Section -->
+          <div class="space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+              <div>
+                <h2 class="text-2xl font-bold text-on-surface tracking-tight">Available Services</h2>
+                <p class="text-sm text-on-surface-variant">Select a category to view availability and schedule your slot</p>
+              </div>
+              <div class="inline-flex items-center gap-1.5 text-on-surface-variant text-xs font-semibold bg-surface-container-lowest px-3 py-1.5 rounded-lg shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-tertiary"></span>
+                <span>All Campus Wings Operating Normally</span>
+              </div>
+            </div>
+
+            <!-- 3 Distinct Realistic Service Cards -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+              <!-- Card A: Doctor Consultation -->
+              <div class="rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between overflow-hidden group hover:shadow-md transition-shadow duration-200">
+                <div>
+                  <div class="relative h-44 w-full overflow-hidden bg-surface-container">
+                    <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" alt="Doctor Consultation Office" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoDZp5D0OYfAjCjPqWsft5CliaD4inh5GVSX5VszOfI-p9l0Nrh-gnk7unoKoJ9qQFkqoFNiCNVolWsQ528UtMZ-SoVJ9gazBc2bZrbjJnpAxOaOWrz2yaiTcMcmCtpPggcR6ul_RDgMa14xDTnrgHvFOmIP_6tzU9we2cvSZjK1FMEgTDL3CJHRS_eCF9svBwo2MkS6txZW9UkU7SQcDxCgBTvPbElkYTMDYF9kzay9pjni29uCDUkg"/>
+                    <div class="absolute top-3 left-3">
+                      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur text-xs font-semibold text-primary shadow-sm">
+                        <span class="material-symbols-outlined text-[16px]">local_hospital</span>
+                        Campus Health
+                      </span>
+                    </div>
+                    <div class="absolute bottom-3 right-3">
+                      <span class="px-2.5 py-0.5 rounded-full bg-surface-container-lowest/90 backdrop-blur text-xs text-tertiary font-bold shadow-sm">
+                        Free for Students
+                      </span>
+                    </div>
+                  </div>
+                  <div class="p-6 space-y-3">
+                    <div>
+                      <p class="text-xs font-bold uppercase tracking-wider text-primary">Campus Health & Wellness Center</p>
+                      <h3 class="text-lg font-bold text-on-surface mt-1">Doctor Consultation</h3>
+                    </div>
+                    <p class="text-sm text-on-surface-variant line-clamp-3">
+                      General health checkups, medical certificates, and confidential student wellness consultations with certified physicians.
+                    </p>
+                    <div class="pt-2 flex flex-col gap-1.5">
+                      <div class="flex items-center gap-2 text-on-surface-variant text-xs">
+                        <span class="material-symbols-outlined text-[18px] text-secondary">schedule</span>
+                        <span>30 mins • Instant confirmation</span>
+                      </div>
+                      <div class="flex items-center gap-2 text-on-surface-variant text-xs">
+                        <span class="material-symbols-outlined text-[18px] text-secondary">location_on</span>
+                        <span>Room 204 Health Wing</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="p-6 pt-0">
+                  <a class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-surface-container-low text-primary text-sm font-semibold hover:bg-primary hover:text-on-primary transition-colors cursor-pointer" data-navigate="book-appointment" data-service="doctor" href="#book-appointment">
+                    <span>Book Doctor Consultation</span>
+                    <span class="material-symbols-outlined text-[18px]">calendar_add_on</span>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Card B: Mentoring Session -->
+              <div class="rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between overflow-hidden group hover:shadow-md transition-shadow duration-200">
+                <div>
+                  <div class="relative h-44 w-full overflow-hidden bg-surface-container">
+                    <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" alt="Faculty Mentorship Hub" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDp3oNnrNy6Gs76FNKba45hZzJz2zw0UxSyKdF6MejJa4K4I-qrVil7Olf8u3MuYNJv1DyE4CEYUdGckKOmKueSl9azKDxb4w2gehX1Ei_w6gxprD05KcRXLYkCkson2e4AAn2yGtWuH-OGCSSz95n0eq4OSPPqsT0cXc90zsc3R0HIPMK_713qO-DfpMjvDqwdkwFO9DSrg6RKLJT5WvVLxvEY0CJpQIVO07DFJKrBAIu0TbjfmrOzFQ"/>
+                    <div class="absolute top-3 left-3">
+                      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur text-xs font-semibold text-primary shadow-sm">
+                        <span class="material-symbols-outlined text-[16px]">school</span>
+                        Faculty Mentorship
+                      </span>
+                    </div>
+                    <div class="absolute bottom-3 right-3">
+                      <span class="px-2.5 py-0.5 rounded-full bg-surface-container-lowest/90 backdrop-blur text-xs text-secondary font-bold shadow-sm">
+                        Hybrid Available
+                      </span>
+                    </div>
+                  </div>
+                  <div class="p-6 space-y-3">
+                    <div>
+                      <p class="text-xs font-bold uppercase tracking-wider text-primary">Academic & Career Development</p>
+                      <h3 class="text-lg font-bold text-on-surface mt-1">Mentoring Session</h3>
+                    </div>
+                    <p class="text-sm text-on-surface-variant line-clamp-3">
+                      One-on-one guidance on coursework, semester project reviews, internship preparation, and resume building with faculty mentors.
+                    </p>
+                    <div class="pt-2 flex flex-col gap-1.5">
+                      <div class="flex items-center gap-2 text-on-surface-variant text-xs">
+                        <span class="material-symbols-outlined text-[18px] text-secondary">schedule</span>
+                        <span>45 mins • In-person or Zoom</span>
+                      </div>
+                      <div class="flex items-center gap-2 text-on-surface-variant text-xs">
+                        <span class="material-symbols-outlined text-[18px] text-secondary">location_on</span>
+                        <span>Engineering Hall 3B</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="p-6 pt-0">
+                  <a class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-primary-container text-on-primary text-sm font-semibold shadow-sm hover:bg-primary transition-colors cursor-pointer" data-navigate="book-appointment" data-service="mentoring" href="#book-appointment">
+                    <span>Book Mentoring Session</span>
+                    <span class="material-symbols-outlined text-[18px]">calendar_add_on</span>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Card C: Salon Appointment -->
+              <div class="rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between overflow-hidden group hover:shadow-md transition-shadow duration-200">
+                <div>
+                  <div class="relative h-44 w-full overflow-hidden bg-surface-container">
+                    <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" alt="Campus Styling Salon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAb63SDFgumS5fo8XIaoe8XF5tpx8l0CDrgipu9CzXQQ0MOh41r73jOzGpHckNpzV9vWF3rBpfreCkEYRcjM6RZgZ5o-eMqtPtXMsISgzYhVRjHC1zFdux-eRSkFoyJEGZ99p6llIcGJ96Mp86RnCYxdrL_11OvZ1z4FRkVh_fqZPwaQ5UZ0-zHmM3UY6Y1MOta1BHhLruQx9cKxtAMbCt4CzW2HoDdyGjAjndZ13sO0IPYnj1jBMuZkQ"/>
+                    <div class="absolute top-3 left-3">
+                      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur text-xs font-semibold text-primary shadow-sm">
+                        <span class="material-symbols-outlined text-[16px]">content_cut</span>
+                        Student Lifestyle
+                      </span>
+                    </div>
+                    <div class="absolute bottom-3 right-3">
+                      <span class="px-2.5 py-0.5 rounded-full bg-surface-container-lowest/90 backdrop-blur text-xs text-primary font-bold shadow-sm">
+                        Student Rates
+                      </span>
+                    </div>
+                  </div>
+                  <div class="p-6 space-y-3">
+                    <div>
+                      <p class="text-xs font-bold uppercase tracking-wider text-primary">Campus Grooming & Style Studio</p>
+                      <h3 class="text-lg font-bold text-on-surface mt-1">Salon Appointment</h3>
+                    </div>
+                    <p class="text-sm text-on-surface-variant line-clamp-3">
+                      Convenient haircuts, styling, and personal grooming services by campus lifestyle partners at student-discounted rates.
+                    </p>
+                    <div class="pt-2 flex flex-col gap-1.5">
+                      <div class="flex items-center gap-2 text-on-surface-variant text-xs">
+                        <span class="material-symbols-outlined text-[18px] text-secondary">schedule</span>
+                        <span>20–40 mins • Student Discount</span>
+                      </div>
+                      <div class="flex items-center gap-2 text-on-surface-variant text-xs">
+                        <span class="material-symbols-outlined text-[18px] text-secondary">location_on</span>
+                        <span>Student Union Suite 12</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="p-6 pt-0">
+                  <a class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-surface-container-low text-primary text-sm font-semibold hover:bg-primary hover:text-on-primary transition-colors cursor-pointer" data-navigate="book-appointment" data-service="salon" href="#book-appointment">
+                    <span>Book Salon Appointment</span>
+                    <span class="material-symbols-outlined text-[18px]">calendar_add_on</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Agile Sprint Cadence & Advisory Notice Footer Module -->
+          <div class="rounded-xl bg-surface-container-low p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 rounded-full bg-surface-container-lowest flex items-center justify-center text-primary shadow-sm flex-shrink-0">
+                <span class="material-symbols-outlined text-[20px]">info</span>
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-on-surface">Sprint Sync Policy</h4>
+                <p class="text-xs text-on-surface-variant">Appointments can be rescheduled or cancelled up to 2 hours before the start time without sprint penalty.</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 self-end sm:self-auto flex-shrink-0">
+              <button class="px-3 py-1.5 rounded-lg bg-surface-container-lowest text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors shadow-sm cursor-pointer" onclick="alert('Campus Wing Operating Hours:\nMon-Fri: 8:00 AM - 6:00 PM\nSat: 9:00 AM - 1:00 PM\nSun: Closed')">
+                View Campus Hours
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         VIEW 2: BOOK APPOINTMENT (Reference: book_appointment/code.html)
+         ================================================================== -->
+    <section class="view-section hidden" id="view-book-appointment">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[calc(100vh-8rem)]">
+        <div class="flex flex-col w-full relative">
+
+          <!-- Ambient Glow Effect -->
+          <div class="absolute -top-12 -left-20 w-96 h-96 bg-primary-container/5 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="absolute top-1/2 -right-24 w-80 h-80 bg-tertiary/5 rounded-full blur-2xl pointer-events-none"></div>
+
+          <!-- Main Two-Column Layout -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start relative z-10">
+
+            <!-- LEFT COLUMN: Step-by-Step Booking Form (8 cols) -->
+            <div class="lg:col-span-8 flex flex-col gap-6">
+
+              <!-- Header & Sprint Context Pill -->
+              <div class="flex flex-col gap-1.5">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-container-high text-primary text-xs font-semibold">
+                    <span class="material-symbols-outlined text-[14px]">tune</span>
+                    Agile Sprint Cadence • Term Slot
+                  </span>
+                  <span class="text-on-surface-variant text-xs">Sprint 3 Milestone</span>
+                </div>
+                <h1 class="text-3xl font-bold text-on-surface tracking-tight">Book an Appointment</h1>
+                <p class="text-base text-on-surface-variant max-w-2xl">
+                  Follow the steps below to pick your service, choose an available date and time, and confirm your booking.
+                </p>
+              </div>
+
+              <!-- STEP 1: Service Selection -->
+              <section aria-labelledby="step1-title" class="bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col gap-4">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-primary-container text-on-primary text-xs font-bold flex items-center justify-center">1</span>
+                    <h2 class="text-base font-bold text-on-surface" id="step1-title">Select Service</h2>
+                  </div>
+                  <span class="text-xs text-on-surface-variant uppercase tracking-wider font-medium">Step 1 of 4</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" id="service-options">
+                  <!-- Option 1: Doctor -->
+                  <button class="service-card group relative text-left p-4 rounded-xl bg-surface-container-low transition-all duration-150 ring-2 ring-primary shadow-sm flex flex-col justify-between h-40 cursor-pointer" id="service-btn-doctor" onclick="selectService('Doctor Consultation', 'Campus Health Center, Room 204', '30 mins', '11:15 AM - 11:45 AM', this)" type="button">
+                    <div class="flex items-start justify-between w-full">
+                      <div class="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[22px]">medical_services</span>
+                      </div>
+                      <span class="service-check w-5 h-5 rounded-full bg-primary text-on-primary flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[14px]">check</span>
+                      </span>
+                    </div>
+                    <div>
+                      <p class="text-sm font-semibold text-on-surface group-hover:text-primary transition-colors">Doctor Consultation</p>
+                      <p class="text-xs text-on-surface-variant mt-0.5">Campus Clinic • 30 mins</p>
+                      <div class="mt-2 inline-flex items-center gap-1 text-xs text-primary font-medium">
+                        <span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                        Dr. Sarah Jenkins, MD
+                      </div>
+                    </div>
+                  </button>
+
+                  <!-- Option 2: Mentoring -->
+                  <button class="service-card group relative text-left p-4 rounded-xl bg-surface-container-lowest hover:bg-surface-container-low transition-all duration-150 shadow-sm flex flex-col justify-between h-40 cursor-pointer" id="service-btn-mentoring" onclick="selectService('Mentoring Session', 'Engineering Hall, Lab 3', '45 mins', '11:15 AM - 12:00 PM', this)" type="button">
+                    <div class="flex items-start justify-between w-full">
+                      <div class="w-10 h-10 rounded-lg bg-surface-container-high text-on-surface-variant flex items-center justify-center group-hover:text-primary transition-colors">
+                        <span class="material-symbols-outlined text-[22px]">school</span>
+                      </div>
+                      <span class="service-check hidden w-5 h-5 rounded-full bg-primary text-on-primary items-center justify-center">
+                        <span class="material-symbols-outlined text-[14px]">check</span>
+                      </span>
+                    </div>
+                    <div>
+                      <p class="text-sm font-semibold text-on-surface group-hover:text-primary transition-colors">Mentoring Session</p>
+                      <p class="text-xs text-on-surface-variant mt-0.5">Faculty Mentorship • 45 mins</p>
+                      <div class="mt-2 inline-flex items-center gap-1 text-xs text-on-surface-variant font-medium">
+                        <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                        Prof. R. Vance, Agile Lead
+                      </div>
+                    </div>
+                  </button>
+
+                  <!-- Option 3: Salon -->
+                  <button class="service-card group relative text-left p-4 rounded-xl bg-surface-container-lowest hover:bg-surface-container-low transition-all duration-150 shadow-sm flex flex-col justify-between h-40 cursor-pointer" id="service-btn-salon" onclick="selectService('Salon Appointment', 'Student Union, Suite B', '30 mins', '11:15 AM - 11:45 AM', this)" type="button">
+                    <div class="flex items-start justify-between w-full">
+                      <div class="w-10 h-10 rounded-lg bg-surface-container-high text-on-surface-variant flex items-center justify-center group-hover:text-primary transition-colors">
+                        <span class="material-symbols-outlined text-[22px]">content_cut</span>
+                      </div>
+                      <span class="service-check hidden w-5 h-5 rounded-full bg-primary text-on-primary items-center justify-center">
+                        <span class="material-symbols-outlined text-[14px]">check</span>
+                      </span>
+                    </div>
+                    <div>
+                      <p class="text-sm font-semibold text-on-surface group-hover:text-primary transition-colors">Salon Appointment</p>
+                      <p class="text-xs text-on-surface-variant mt-0.5">Student Grooming • 30 mins</p>
+                      <div class="mt-2 inline-flex items-center gap-1 text-xs text-on-surface-variant font-medium">
+                        <span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                        Campus Stylist Desk
+                      </div>
+                    </div>
+                  </button>
+                </div>
+              </section>
+
+              <!-- STEP 2: Select Date -->
+              <section aria-labelledby="step2-title" class="bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col gap-4">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-primary-container text-on-primary text-xs font-bold flex items-center justify-center">2</span>
+                    <h2 class="text-base font-bold text-on-surface" id="step2-title">Select Date</h2>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <button aria-label="Previous month" class="w-8 h-8 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface flex items-center justify-center transition-colors cursor-pointer" type="button">
+                      <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+                    </button>
+                    <div class="px-3 py-1 rounded-lg bg-surface text-xs font-semibold text-on-surface flex items-center gap-1.5">
+                      <span class="material-symbols-outlined text-primary text-[16px]">calendar_month</span>
+                      <span>October 2025</span>
+                    </div>
+                    <button aria-label="Next month" class="w-8 h-8 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface flex items-center justify-center transition-colors cursor-pointer" type="button">
+                      <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Mini Calendar Strip -->
+                <div class="grid grid-cols-7 gap-1.5 sm:gap-2 pt-2">
+                  <button class="date-chip flex flex-col items-center justify-center p-3 rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-colors cursor-pointer" onclick="selectDate('Monday, Oct 20, 2025', this)" type="button">
+                    <span class="text-xs text-on-surface-variant uppercase font-medium">Mon</span>
+                    <span class="text-base font-bold text-on-surface mt-1">20</span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-tertiary mt-1.5"></span>
+                  </button>
+                  <button class="date-chip flex flex-col items-center justify-center p-3 rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-colors cursor-pointer" onclick="selectDate('Tuesday, Oct 21, 2025', this)" type="button">
+                    <span class="text-xs text-on-surface-variant uppercase font-medium">Tue</span>
+                    <span class="text-base font-bold text-on-surface mt-1">21</span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-tertiary mt-1.5"></span>
+                  </button>
+                  <button class="date-chip selected-date flex flex-col items-center justify-center p-3 rounded-lg bg-primary-container text-on-primary shadow-sm ring-2 ring-primary transition-all cursor-pointer" onclick="selectDate('Wednesday, Oct 22, 2025', this)" type="button">
+                    <span class="text-xs text-on-primary uppercase font-bold">Wed</span>
+                    <span class="text-base font-bold text-on-primary mt-1">22</span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-on-primary mt-1.5"></span>
+                  </button>
+                  <button class="date-chip flex flex-col items-center justify-center p-3 rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-colors cursor-pointer" onclick="selectDate('Thursday, Oct 23, 2025', this)" type="button">
+                    <span class="text-xs text-on-surface-variant uppercase font-medium">Thu</span>
+                    <span class="text-base font-bold text-on-surface mt-1">23</span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-tertiary mt-1.5"></span>
+                  </button>
+                  <button class="date-chip flex flex-col items-center justify-center p-3 rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-colors cursor-pointer" onclick="selectDate('Friday, Oct 24, 2025', this)" type="button">
+                    <span class="text-xs text-on-surface-variant uppercase font-medium">Fri</span>
+                    <span class="text-base font-bold text-on-surface mt-1">24</span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-tertiary mt-1.5"></span>
+                  </button>
+                  <button class="flex flex-col items-center justify-center p-3 rounded-lg bg-surface opacity-45 cursor-not-allowed" disabled="" type="button">
+                    <span class="text-xs text-on-surface-variant uppercase font-medium">Sat</span>
+                    <span class="text-base text-on-surface-variant mt-1">25</span>
+                    <span class="text-[10px] text-on-surface-variant mt-1.5">Off</span>
+                  </button>
+                  <button class="flex flex-col items-center justify-center p-3 rounded-lg bg-surface opacity-45 cursor-not-allowed" disabled="" type="button">
+                    <span class="text-xs text-on-surface-variant uppercase font-medium">Sun</span>
+                    <span class="text-base text-on-surface-variant mt-1">26</span>
+                    <span class="text-[10px] text-on-surface-variant mt-1.5">Off</span>
+                  </button>
+                </div>
+
+                <div class="flex items-center gap-2 p-3 rounded-lg bg-surface-container text-xs text-on-surface">
+                  <span class="material-symbols-outlined text-primary text-[18px]">event_available</span>
+                  <span>Currently selected: <strong class="text-primary font-bold" id="selected-date-callout">Wednesday, Oct 22, 2025</strong> • 6 open slots today</span>
+                </div>
+              </section>
+
+              <!-- STEP 3: Available Time-Slots -->
+              <section aria-labelledby="step3-title" class="bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col gap-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                  <div class="flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-primary-container text-on-primary text-xs font-bold flex items-center justify-center">3</span>
+                    <h2 class="text-base font-bold text-on-surface" id="step3-title">Select a Time Slot</h2>
+                  </div>
+                  <span class="text-xs text-on-surface-variant flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[16px] text-secondary">schedule</span>
+                    (Local Campus Time • Eastern Time)
+                  </span>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="timeslot-container">
+                  <button class="timeslot-btn p-3 rounded-lg bg-surface-container-low hover:bg-surface-container-high text-on-surface text-xs font-semibold flex flex-col items-center justify-center gap-0.5 transition-colors cursor-pointer" onclick="selectSlot('09:00 AM - 09:30 AM', this)" type="button">
+                    <span>09:00 AM</span>
+                    <span class="text-[11px] text-tertiary">Available</span>
+                  </button>
+                  <button class="p-3 rounded-lg bg-surface text-outline cursor-not-allowed flex flex-col items-center justify-center gap-0.5 opacity-60" disabled="" type="button">
+                    <span class="line-through text-xs">09:30 AM</span>
+                    <span class="text-[10px] text-error px-1.5 py-0.2 rounded bg-error-container/40">Full</span>
+                  </button>
+                  <button class="timeslot-btn p-3 rounded-lg bg-surface-container-low hover:bg-surface-container-high text-on-surface text-xs font-semibold flex flex-col items-center justify-center gap-0.5 transition-colors cursor-pointer" onclick="selectSlot('10:00 AM - 10:30 AM', this)" type="button">
+                    <span>10:00 AM</span>
+                    <span class="text-[11px] text-tertiary">Available</span>
+                  </button>
+                  <button class="timeslot-btn selected-slot p-3 rounded-lg bg-primary-container text-on-primary ring-2 ring-primary text-xs font-semibold flex flex-col items-center justify-center gap-0.5 shadow-sm transition-all cursor-pointer" onclick="selectSlot('11:15 AM - 11:45 AM', this)" type="button">
+                    <span class="font-bold">11:15 AM</span>
+                    <span class="text-[11px] text-on-primary-container">Selected</span>
+                  </button>
+                  <button class="p-3 rounded-lg bg-surface text-outline cursor-not-allowed flex flex-col items-center justify-center gap-0.5 opacity-60" disabled="" type="button">
+                    <span class="line-through text-xs">01:00 PM</span>
+                    <span class="text-[10px] text-on-surface-variant px-1.5 py-0.2 rounded bg-surface-variant">Unavailable</span>
+                  </button>
+                  <button class="timeslot-btn p-3 rounded-lg bg-surface-container-low hover:bg-surface-container-high text-on-surface text-xs font-semibold flex flex-col items-center justify-center gap-0.5 transition-colors cursor-pointer" onclick="selectSlot('02:00 PM - 02:30 PM', this)" type="button">
+                    <span>02:00 PM</span>
+                    <span class="text-[11px] text-tertiary">Available</span>
+                  </button>
+                  <button class="timeslot-btn p-3 rounded-lg bg-surface-container-low hover:bg-surface-container-high text-on-surface text-xs font-semibold flex flex-col items-center justify-center gap-0.5 transition-colors cursor-pointer" onclick="selectSlot('03:30 PM - 04:00 PM', this)" type="button">
+                    <span>03:30 PM</span>
+                    <span class="text-[11px] text-tertiary">Available</span>
+                  </button>
+                  <button class="p-3 rounded-lg bg-surface text-outline cursor-not-allowed flex flex-col items-center justify-center gap-0.5 opacity-60" disabled="" type="button">
+                    <span class="line-through text-xs">04:00 PM</span>
+                    <span class="text-[10px] text-error px-1.5 py-0.2 rounded bg-error-container/40">Full</span>
+                  </button>
+                </div>
+              </section>
+
+              <!-- STEP 4: Student & Contact Information -->
+              <section aria-labelledby="step4-title" class="bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col gap-4">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-primary-container text-on-primary text-xs font-bold flex items-center justify-center">4</span>
+                    <h2 class="text-base font-bold text-on-surface" id="step4-title">Student & Contact Information</h2>
+                  </div>
+                  <span class="text-xs text-tertiary font-semibold flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[16px]">verified_user</span>
+                    SSO Verified
+                  </span>
+                </div>
+
+                <form class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="booking-form" onsubmit="event.preventDefault(); triggerBookingSubmission();">
+                  <!-- Full Name -->
+                  <div class="flex flex-col gap-1.5">
+                    <label class="text-xs font-semibold text-on-surface flex items-center justify-between" for="full-name">
+                      <span>Full Name <span class="text-error">*</span></span>
+                      <span class="text-[11px] text-on-surface-variant">Read-only SSO</span>
+                    </label>
+                    <div class="relative">
+                      <input class="w-full h-10 px-3 pl-9 rounded-lg bg-surface-container-low text-on-surface text-sm outline-none focus:ring-2 focus:ring-primary cursor-default" id="full-name" name="name" readonly="" type="text" value="Alex Morgan"/>
+                      <span class="material-symbols-outlined absolute left-2.5 top-2.5 text-[18px] text-on-surface-variant">person</span>
+                    </div>
+                  </div>
+
+                  <!-- College Email -->
+                  <div class="flex flex-col gap-1.5">
+                    <label class="text-xs font-semibold text-on-surface flex items-center justify-between" for="email">
+                      <span>College Email Address <span class="text-error">*</span></span>
+                      <span class="text-[11px] text-on-surface-variant">Campus domain</span>
+                    </label>
+                    <div class="relative">
+                      <input class="w-full h-10 px-3 pl-9 rounded-lg bg-surface-container-low text-on-surface text-sm outline-none focus:ring-2 focus:ring-primary cursor-default" id="email" name="email" readonly="" type="email" value="alex.morgan@college.edu"/>
+                      <span class="material-symbols-outlined absolute left-2.5 top-2.5 text-[18px] text-on-surface-variant">alternate_email</span>
+                    </div>
+                  </div>
+
+                  <!-- Phone Number -->
+                  <div class="flex flex-col gap-1.5 sm:col-span-2">
+                    <label class="text-xs font-semibold text-on-surface flex items-center justify-between" for="phone">
+                      <span>Phone Number (SMS Reminders) <span class="text-error">*</span></span>
+                      <span class="text-[11px] text-tertiary">Opted into Sprint SMS</span>
+                    </label>
+                    <div class="relative">
+                      <input class="w-full h-10 px-3 pl-9 rounded-lg bg-surface text-on-surface text-sm outline-none focus:ring-2 focus:ring-primary border border-outline-variant/40" id="phone" name="phone" type="tel" value="+1 (555) 234-5678"/>
+                      <span class="material-symbols-outlined absolute left-2.5 top-2.5 text-[18px] text-on-surface-variant">phone_iphone</span>
+                    </div>
+                  </div>
+
+                  <!-- Purpose / Notes -->
+                  <div class="flex flex-col gap-1.5 sm:col-span-2">
+                    <label class="text-xs font-semibold text-on-surface flex items-center justify-between" for="notes">
+                      <span>Purpose or Notes <span class="text-xs text-on-surface-variant font-normal">(Optional)</span></span>
+                      <span class="text-[11px] text-on-surface-variant">Max 250 characters</span>
+                    </label>
+                    <textarea class="w-full p-3 rounded-lg bg-surface text-on-surface text-sm outline-none focus:ring-2 focus:ring-primary resize-none border border-outline-variant/40" id="notes" name="notes" placeholder="Briefly mention the reason for visit or specific requirements..." rows="3"></textarea>
+                  </div>
+
+                  <div class="sm:col-span-2 flex items-center gap-2 pt-2">
+                    <span class="material-symbols-outlined text-primary text-[20px]">verified</span>
+                    <p class="text-xs text-on-surface-variant">
+                      Your reservation updates will sync with your Agile Scrum sprint board profile.
+                    </p>
+                  </div>
+                </form>
+              </section>
+            </div>
+
+            <!-- RIGHT COLUMN: Dynamic Sticky Booking Summary Card (4 cols) -->
+            <aside class="lg:col-span-4 sticky-summary flex flex-col gap-4">
+              <div class="bg-surface-container-lowest p-6 rounded-xl shadow-md flex flex-col gap-6 relative overflow-hidden">
+                <!-- Top Accent Banner -->
+                <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-primary to-primary-container"></div>
+                
+                <!-- Card Title & Live Status -->
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-surface-container-high text-primary flex items-center justify-center">
+                      <span class="material-symbols-outlined text-[20px]">calendar_today</span>
+                    </div>
+                    <h2 class="text-lg font-bold text-on-surface">Booking Summary</h2>
+                  </div>
+                  <span class="px-2.5 py-0.5 rounded-full bg-surface-container-high text-primary text-xs font-semibold">
+                    Live Preview
+                  </span>
+                </div>
+
+                <!-- Structured Details Matrix -->
+                <div class="flex flex-col gap-3">
+                  <div class="flex items-start gap-2.5 p-3 rounded-lg bg-surface-container-low">
+                    <span class="material-symbols-outlined text-primary text-[20px] mt-0.5">medical_services</span>
+                    <div class="flex flex-col min-w-0">
+                      <span class="text-[11px] font-semibold text-on-surface-variant uppercase">Service • Practitioner</span>
+                      <span class="text-sm font-bold text-on-surface truncate" id="summary-service">Doctor Consultation</span>
+                      <span class="text-xs text-primary font-medium" id="summary-practitioner">Dr. Sarah Jenkins, MD</span>
+                    </div>
+                  </div>
+
+                  <div class="flex items-start gap-2.5 p-3 rounded-lg bg-surface-container-low">
+                    <span class="material-symbols-outlined text-primary text-[20px] mt-0.5">event</span>
+                    <div class="flex flex-col min-w-0">
+                      <span class="text-[11px] font-semibold text-on-surface-variant uppercase">Appointment Date</span>
+                      <span class="text-sm font-bold text-on-surface" id="summary-date">Wednesday, October 22, 2025</span>
+                      <span class="text-xs text-on-surface-variant">Fall 2025 Academic Term</span>
+                    </div>
+                  </div>
+
+                  <div class="flex items-start gap-2.5 p-3 rounded-lg bg-surface-container-low">
+                    <span class="material-symbols-outlined text-primary text-[20px] mt-0.5">alarm</span>
+                    <div class="flex flex-col min-w-0">
+                      <span class="text-[11px] font-semibold text-on-surface-variant uppercase">Time & Duration</span>
+                      <span class="text-sm font-bold text-on-surface" id="summary-time">11:15 AM - 11:45 AM (30 mins)</span>
+                      <span class="text-xs text-tertiary font-medium">No schedule conflict detected</span>
+                    </div>
+                  </div>
+
+                  <div class="flex items-start gap-2.5 p-3 rounded-lg bg-surface-container-low">
+                    <span class="material-symbols-outlined text-primary text-[20px] mt-0.5">place</span>
+                    <div class="flex flex-col min-w-0">
+                      <span class="text-[11px] font-semibold text-on-surface-variant uppercase">Location</span>
+                      <span class="text-sm font-bold text-on-surface" id="summary-location">Campus Health Center, Room 204</span>
+                      <span class="text-xs text-on-surface-variant">Building 4, Central Campus</span>
+                    </div>
+                  </div>
+
+                  <div class="flex items-start gap-2.5 p-3 rounded-lg bg-surface-container-low">
+                    <span class="material-symbols-outlined text-primary text-[20px] mt-0.5">badge</span>
+                    <div class="flex flex-col min-w-0">
+                      <span class="text-[11px] font-semibold text-on-surface-variant uppercase">Student Profile</span>
+                      <span class="text-sm font-bold text-on-surface">Alex Morgan</span>
+                      <span class="text-xs text-on-surface-variant">ID: #ST-89241 • Sophomore</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Fee Notice -->
+                <div class="p-3.5 rounded-lg bg-surface flex items-center justify-between border border-outline-variant/30">
+                  <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-tertiary text-[20px]">health_and_safety</span>
+                    <span class="text-xs font-bold text-on-surface">Total Fee:</span>
+                  </div>
+                  <div class="text-right">
+                    <span class="text-sm text-tertiary font-bold">Free</span>
+                    <p class="text-[10px] text-on-surface-variant">Covered by Student Health Plan</p>
+                  </div>
+                </div>
+
+                <!-- CTA Button -->
+                <div class="flex flex-col gap-2">
+                  <button class="w-full py-3.5 px-6 rounded-lg bg-primary-container text-on-primary hover:bg-primary text-sm font-bold flex items-center justify-center gap-2 shadow-sm transition-all duration-150 transform active:scale-[0.99] cursor-pointer" onclick="triggerBookingSubmission()" type="button">
+                    <span>Confirm Booking</span>
+                    <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                  </button>
+                  <p class="text-xs text-center text-on-surface-variant flex items-center justify-center gap-1.5 mt-1">
+                    <span class="material-symbols-outlined text-tertiary text-[16px]">mail</span>
+                    <span>Instant confirmation email will be sent.</span>
+                  </p>
+                </div>
+              </div>
+
+              <!-- Quick Help Card -->
+              <div class="bg-surface-container p-4 rounded-xl flex items-center gap-3 text-on-surface">
+                <span class="material-symbols-outlined text-primary text-[24px]">support_agent</span>
+                <div class="flex flex-col">
+                  <span class="text-xs font-bold">Need to reschedule later?</span>
+                  <span class="text-xs text-on-surface-variant">Easily adjust slots up to 2 hours before the session from 'My Appointments'.</span>
+                </div>
+              </div>
+            </aside>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         VIEW 3: MY APPOINTMENTS (Reference: my_appointments/code.html)
+         ================================================================== -->
+    <section class="view-section hidden" id="view-my-appointments">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[calc(100vh-8rem)]">
+        <div class="flex flex-col w-full">
+
+          <!-- Top Hero Header Zone -->
+          <div class="relative bg-surface-container-lowest rounded-xl p-6 lg:p-8 shadow-sm mb-6 overflow-hidden">
+            <div class="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-primary/5 pointer-events-none blur-2xl"></div>
+            <div class="relative flex flex-col md:flex-row md:items-center justify-between gap-4 z-10">
+              <div class="space-y-1.5 max-w-2xl">
+                <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-primary-fixed text-on-primary-fixed text-xs font-semibold">
+                  <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                  Academic Semester Portal • Sprint 3
+                </div>
+                <h1 class="text-3xl font-bold text-on-surface tracking-tight">My Appointments</h1>
+                <p class="text-sm text-on-surface-variant leading-relaxed">
+                  Manage your upcoming bookings, review past session history, and reschedule or cancel when needed with seamless agile updates.
+                </p>
+              </div>
+              <div class="flex items-center gap-2 self-start md:self-auto">
+                <button class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-on-primary hover:bg-primary-container text-sm font-bold shadow-sm transition-all active:scale-[0.98] cursor-pointer" onclick="navigateTo('book-appointment')" type="button">
+                  <span class="material-symbols-outlined text-[18px]">add</span>
+                  <span>+ Book New Appointment</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filter, Search & Status Strip -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-6">
+            <!-- Tabs Pill Matrix -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0">
+              <button class="px-4 py-2 rounded-full text-xs font-semibold bg-primary text-on-primary shadow-sm flex items-center gap-1.5 transition-colors cursor-pointer" id="tab-btn-all" onclick="switchTab('all')">
+                <span>All</span>
+                <span class="w-5 h-5 rounded-full bg-surface-container-highest text-on-surface text-center flex items-center justify-center text-[10px]">4</span>
+              </button>
+              <button class="px-4 py-2 rounded-full text-xs font-semibold bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors flex items-center gap-1.5 cursor-pointer" id="tab-btn-upcoming" onclick="switchTab('upcoming')">
+                <span>Upcoming</span>
+                <span class="w-5 h-5 rounded-full bg-primary text-on-primary text-center flex items-center justify-center text-[10px]">2</span>
+              </button>
+              <button class="px-4 py-2 rounded-full text-xs font-semibold bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors flex items-center gap-1.5 cursor-pointer" id="tab-btn-completed" onclick="switchTab('completed')">
+                <span>Completed</span>
+                <span class="w-5 h-5 rounded-full bg-surface-container-highest text-on-surface text-center flex items-center justify-center text-[10px]">2</span>
+              </button>
+              <button class="px-4 py-2 rounded-full text-xs font-semibold bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors flex items-center gap-1.5 cursor-pointer" id="tab-btn-cancelled" onclick="switchTab('cancelled')">
+                <span>Cancelled</span>
+                <span class="w-5 h-5 rounded-full bg-surface-container-highest text-on-surface text-center flex items-center justify-center text-[10px]">0</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Appointments List Stack -->
+          <div class="flex flex-col gap-4" id="appointments-stack">
+
+            <!-- Card 1: Upcoming Mentoring -->
+            <div class="rounded-xl bg-surface-container-lowest p-6 shadow-sm border border-outline-variant/30 hover:border-primary/40 transition-colors flex flex-col md:flex-row md:items-center justify-between gap-6" data-status="upcoming">
+              <div class="flex items-start gap-4">
+                <div class="w-14 h-14 rounded-xl bg-primary-container text-on-primary flex flex-col items-center justify-center flex-shrink-0">
+                  <span class="text-[10px] uppercase font-bold tracking-wider leading-none">OCT</span>
+                  <span class="text-xl font-bold leading-none mt-1">14</span>
+                </div>
+                <div class="space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary-fixed text-on-primary-fixed-variant">Upcoming</span>
+                    <span class="text-xs text-on-surface-variant">2:00 PM - 2:45 PM (45 mins)</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-on-surface">Faculty Mentoring Session</h3>
+                  <p class="text-xs text-on-surface-variant">Prof. Arthur Davis • Engineering Hall 3B • Sprint Review & Course Project</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 self-end md:self-center">
+                <button class="px-3.5 py-2 rounded-lg bg-surface-container text-xs font-semibold text-on-surface hover:bg-surface-container-high transition-colors cursor-pointer" onclick="toggleDetailsModal(1)">
+                  View Details
+                </button>
+                <button class="px-3.5 py-2 rounded-lg bg-surface-container-lowest border border-outline-variant/60 text-xs font-semibold text-primary hover:bg-surface-container-low transition-colors cursor-pointer" onclick="navigateTo('book-appointment')">
+                  Reschedule
+                </button>
+              </div>
+            </div>
+
+            <!-- Card 2: Upcoming Doctor -->
+            <div class="rounded-xl bg-surface-container-lowest p-6 shadow-sm border border-outline-variant/30 hover:border-primary/40 transition-colors flex flex-col md:flex-row md:items-center justify-between gap-6" data-status="upcoming">
+              <div class="flex items-start gap-4">
+                <div class="w-14 h-14 rounded-xl bg-primary text-on-primary flex flex-col items-center justify-center flex-shrink-0">
+                  <span class="text-[10px] uppercase font-bold tracking-wider leading-none">OCT</span>
+                  <span class="text-xl font-bold leading-none mt-1">22</span>
+                </div>
+                <div class="space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary-fixed text-on-primary-fixed-variant">Upcoming</span>
+                    <span class="text-xs text-on-surface-variant">11:15 AM - 11:45 AM (30 mins)</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-on-surface">Doctor Consultation</h3>
+                  <p class="text-xs text-on-surface-variant">Dr. Sarah Jenkins, MD • Health Center Rm 204 • Routine Checkup</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 self-end md:self-center">
+                <button class="px-3.5 py-2 rounded-lg bg-surface-container text-xs font-semibold text-on-surface hover:bg-surface-container-high transition-colors cursor-pointer" onclick="toggleDetailsModal(2)">
+                  View Details
+                </button>
+                <button class="px-3.5 py-2 rounded-lg bg-surface-container-lowest border border-outline-variant/60 text-xs font-semibold text-primary hover:bg-surface-container-low transition-colors cursor-pointer" onclick="navigateTo('book-appointment')">
+                  Reschedule
+                </button>
+              </div>
+            </div>
+
+            <!-- Card 3: Completed Advising -->
+            <div class="rounded-xl bg-surface-container-lowest p-6 shadow-sm border border-outline-variant/30 flex flex-col md:flex-row md:items-center justify-between gap-6 opacity-90" data-status="completed">
+              <div class="flex items-start gap-4">
+                <div class="w-14 h-14 rounded-xl bg-surface-container text-secondary flex flex-col items-center justify-center flex-shrink-0">
+                  <span class="text-[10px] uppercase font-bold tracking-wider leading-none">OCT</span>
+                  <span class="text-xl font-bold leading-none mt-1">08</span>
+                </div>
+                <div class="space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-surface-container-high text-secondary">Completed</span>
+                    <span class="text-xs text-on-surface-variant">3:00 PM - 3:30 PM (30 mins)</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-on-surface">Academic Advising</h3>
+                  <p class="text-xs text-on-surface-variant">Advisor M. Patel • Administration Wing 101 • Sprint Electives Plan</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 self-end md:self-center">
+                <button class="px-3.5 py-2 rounded-lg bg-surface-container text-xs font-semibold text-on-surface hover:bg-surface-container-high transition-colors cursor-pointer" onclick="toggleDetailsModal(3)">
+                  View Summary
+                </button>
+              </div>
+            </div>
+
+            <!-- Card 4: Completed Salon -->
+            <div class="rounded-xl bg-surface-container-lowest p-6 shadow-sm border border-outline-variant/30 flex flex-col md:flex-row md:items-center justify-between gap-6 opacity-90" data-status="completed">
+              <div class="flex items-start gap-4">
+                <div class="w-14 h-14 rounded-xl bg-surface-container text-secondary flex flex-col items-center justify-center flex-shrink-0">
+                  <span class="text-[10px] uppercase font-bold tracking-wider leading-none">OCT</span>
+                  <span class="text-xl font-bold leading-none mt-1">02</span>
+                </div>
+                <div class="space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-surface-container-high text-secondary">Completed</span>
+                    <span class="text-xs text-on-surface-variant">1:30 PM - 2:00 PM (30 mins)</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-on-surface">Salon & Grooming</h3>
+                  <p class="text-xs text-on-surface-variant">Studio Stylist • Union Suite 12 • Standard Haircut</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 self-end md:self-center">
+                <button class="px-3.5 py-2 rounded-lg bg-surface-container text-xs font-semibold text-on-surface hover:bg-surface-container-high transition-colors cursor-pointer" onclick="toggleDetailsModal(4)">
+                  View Summary
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Empty State (Hidden by default, shown when filtering empty tab) -->
+          <div class="hidden bg-surface-container-lowest rounded-xl p-12 text-center shadow-sm border border-outline-variant/30 my-6" id="tab-empty-state">
+            <div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center mx-auto text-primary mb-4">
+              <span class="material-symbols-outlined text-[32px]">event_busy</span>
+            </div>
+            <h3 class="text-lg font-bold text-on-surface" id="empty-heading">No appointments found</h3>
+            <p class="text-sm text-on-surface-variant max-w-md mx-auto mt-1 mb-6" id="empty-subtext">
+              There are no bookings matching this status filter.
+            </p>
+            <button class="px-4 py-2.5 rounded-lg bg-primary text-on-primary font-bold text-sm shadow-sm hover:bg-primary-container transition-all cursor-pointer" onclick="navigateTo('book-appointment')">
+              Book an Appointment
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================================================================
+       MODAL 1: BOOKING CONFIRMATION MODAL
+       ====================================================================== -->
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay hidden" id="booking-confirmation-modal">
+    <div class="bg-surface-container-lowest rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-xl border border-outline-variant/40 flex flex-col items-center text-center">
+      <div class="w-16 h-16 rounded-full bg-tertiary/15 text-tertiary flex items-center justify-center mb-4">
+        <span class="material-symbols-outlined text-[36px]">check_circle</span>
+      </div>
+      <h3 class="text-2xl font-bold text-on-surface">Booking Confirmed!</h3>
+      <p class="text-sm text-on-surface-variant mt-2 mb-6">
+        Your appointment request has been logged and synchronized with your sprint calendar. A confirmation email was sent to your student address.
+      </p>
+      <div class="w-full bg-surface-container-low p-4 rounded-xl text-left text-xs space-y-2 mb-6">
+        <div class="flex justify-between">
+          <span class="text-on-surface-variant">Reference ID:</span>
+          <span class="font-bold text-on-surface font-mono" id="confirm-ref-id">#APT-2025-8942</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-on-surface-variant">Service:</span>
+          <span class="font-bold text-on-surface" id="confirm-service">—</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-on-surface-variant">Date:</span>
+          <span class="font-bold text-on-surface" id="confirm-date">—</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-on-surface-variant">Time:</span>
+          <span class="font-bold text-on-surface" id="confirm-time">—</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-on-surface-variant">Status:</span>
+          <span class="font-bold text-tertiary" id="confirm-status">Confirmed & Active</span>
+        </div>
+      </div>
+      <div class="flex flex-col sm:flex-row items-center gap-3 w-full">
+        <button class="w-full py-2.5 rounded-lg bg-primary text-on-primary font-bold text-sm hover:bg-primary-container transition-colors cursor-pointer" onclick="closeBookingModal(); navigateTo('my-appointments');">
+          View My Appointments
+        </button>
+        <button class="w-full py-2.5 rounded-lg bg-surface-container text-on-surface font-semibold text-sm hover:bg-surface-container-high transition-colors cursor-pointer" onclick="closeBookingModal()">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL 2: APPOINTMENT DETAILS MODAL
+       ====================================================================== -->
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay hidden" id="details-modal">
+    <div class="bg-surface-container-lowest rounded-2xl max-w-lg w-full p-6 sm:p-8 shadow-xl border border-outline-variant/40">
+      <div class="flex items-center justify-between pb-4 border-b border-outline-variant/30">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary text-[22px]">event_note</span>
+          <h3 class="text-lg font-bold text-on-surface">Appointment Record</h3>
+        </div>
+        <button class="p-1 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors cursor-pointer" onclick="toggleDetailsModal()">
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
+      <div class="py-4 space-y-4 text-xs">
+        <div class="grid grid-cols-2 gap-3">
+          <div class="p-3 rounded-lg bg-surface-container-low">
+            <span class="text-on-surface-variant uppercase text-[10px] font-bold">Category</span>
+            <p class="font-bold text-sm text-on-surface mt-0.5">Academic / Health</p>
+          </div>
+          <div class="p-3 rounded-lg bg-surface-container-low">
+            <span class="text-on-surface-variant uppercase text-[10px] font-bold">Sprint Term</span>
+            <p class="font-bold text-sm text-on-surface mt-0.5">Sprint 3 Milestone</p>
+          </div>
+        </div>
+        <div class="p-3 rounded-lg bg-surface-container-low space-y-1">
+          <span class="text-on-surface-variant uppercase text-[10px] font-bold">Notes / Agenda</span>
+          <p class="text-on-surface text-xs leading-relaxed">
+            Routine student wellness and coursework sprint velocity sync. All prerequisite notes logged in university repository.
+          </p>
+        </div>
+      </div>
+      <div class="pt-4 flex justify-end gap-2 border-t border-outline-variant/30">
+        <button class="px-4 py-2 rounded-lg bg-primary text-on-primary text-xs font-bold hover:bg-primary-container transition-colors cursor-pointer" onclick="toggleDetailsModal()">
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL 3: RESCHEDULE APPOINTMENT MODAL (SCRUM-7 & SCRUM-9)
+       ====================================================================== -->
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay hidden" id="reschedule-modal">
+    <div class="bg-surface-container-lowest rounded-2xl max-w-lg w-full p-6 sm:p-8 shadow-xl border border-outline-variant/40 flex flex-col gap-4">
+      <div class="flex items-center justify-between pb-3 border-b border-outline-variant/30">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary text-[22px]">edit_calendar</span>
+          <h3 class="text-lg font-bold text-on-surface">Reschedule Appointment</h3>
+        </div>
+        <button class="p-1 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors cursor-pointer" onclick="closeRescheduleModal()">
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
+
+      <!-- Current Appointment Info Box -->
+      <div class="p-3.5 rounded-xl bg-surface-container-low text-xs space-y-1.5" id="reschedule-current-info">
+        <div class="flex justify-between items-center">
+          <span class="text-on-surface-variant font-medium">Service:</span>
+          <span class="font-bold text-on-surface" id="reschedule-service-name">—</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-on-surface-variant font-medium">Current Schedule:</span>
+          <span class="font-bold text-primary" id="reschedule-current-schedule">—</span>
+        </div>
+      </div>
+
+      <!-- Error / Conflict Alert Banner -->
+      <div class="p-3 rounded-lg bg-error-container text-on-error-container text-xs hidden flex items-center gap-2" id="reschedule-error-banner">
+        <span class="material-symbols-outlined text-[18px] text-error flex-shrink-0">error</span>
+        <span id="reschedule-error-text">Please choose an available slot.</span>
+      </div>
+
+      <!-- Step A: Select New Date -->
+      <div class="space-y-2">
+        <label class="text-xs font-bold text-on-surface uppercase tracking-wider">1. Select New Date</label>
+        <div class="grid grid-cols-5 gap-1.5" id="reschedule-date-chips">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+
+      <!-- Step B: Select New Time Slot -->
+      <div class="space-y-2">
+        <label class="text-xs font-bold text-on-surface uppercase tracking-wider">2. Select New Time Slot</label>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="reschedule-timeslot-container">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="pt-3 flex flex-col sm:flex-row items-center justify-end gap-2 border-t border-outline-variant/30">
+        <button class="w-full sm:w-auto px-4 py-2.5 rounded-lg bg-surface-container text-on-surface text-xs font-semibold hover:bg-surface-container-high transition-colors cursor-pointer" onclick="closeRescheduleModal()">
+          Cancel
+        </button>
+        <button class="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-primary text-on-primary text-xs font-bold shadow-sm hover:bg-primary-container transition-colors cursor-pointer" onclick="confirmReschedule()">
+          Confirm Reschedule
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL 4: CANCEL CONFIRMATION MODAL (SCRUM-8)
+       ====================================================================== -->
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay hidden" id="cancel-confirm-modal">
+    <div class="bg-surface-container-lowest rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-xl border border-outline-variant/40 flex flex-col items-center text-center">
+      <div class="w-14 h-14 rounded-full bg-error-container text-error flex items-center justify-center mb-3">
+        <span class="material-symbols-outlined text-[30px]">event_busy</span>
+      </div>
+      <h3 class="text-xl font-bold text-on-surface">Cancel Appointment?</h3>
+      <p class="text-xs text-on-surface-variant mt-1.5 mb-4 max-w-sm">
+        Are you sure you want to cancel this booking? The reserved time slot will be released for other students.
+      </p>
+      <div class="w-full p-3 rounded-lg bg-surface-container-low text-xs text-left mb-5 space-y-1" id="cancel-modal-details">
+        <!-- Populated via JS -->
+      </div>
+      <div class="flex flex-col sm:flex-row items-center gap-2.5 w-full">
+        <button class="w-full py-2.5 rounded-lg bg-surface-container text-on-surface text-xs font-semibold hover:bg-surface-container-high transition-colors cursor-pointer" onclick="closeCancelModal()">
+          Keep Appointment
+        </button>
+        <button class="w-full py-2.5 rounded-lg bg-error text-on-error text-xs font-bold hover:bg-red-700 transition-colors shadow-sm cursor-pointer" onclick="confirmCancelAppointment()">
+          Yes, Cancel Booking
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       GLOBAL FOOTER (Shared Shell)
+       ====================================================================== -->
+  <footer class="w-full bg-surface-container-lowest border-t border-outline-variant/30 py-6 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-space-sm text-on-surface-variant text-xs">
+      <p>College Agile Scrum Team Sprint 3 • Appointment Scheduler (SCRUM-1)</p>
+      <div class="flex items-center gap-space-md">
+        <span class="inline-flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-tertiary"></span>
+          System Online
+        </span>
+        <span>Academic Term 2024-2025</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Application Script & Test Suite -->
+  <script src="js/app.js"></script>
+  <script src="tests/app.test.js"></script>
+</body>
+</html>
