@@ -1,0 +1,45 @@
+
+name: CampusConnect Deployment Health Check
+
+on:
+  workflow_run:
+    workflows: ["pages-build-deployment"]
+    types:
+      - completed
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  health-check:
+    name: Verify Live Website
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check deployment status
+        if: github.event_name == 'workflow_run'
+        run: |
+          if [ "${{ github.event.workflow_run.conclusion }}" != "success" ]; then
+            echo "Deployment failed. Health check stopped."
+            exit 1
+          fi
+
+      - name: Wait for deployment
+        run: sleep 30
+
+      - name: Check live website
+        run: |
+          URL="https://priya-bhatt-2602.github.io/Appointment-Scheduler-DevOps/"
+
+          STATUS=$(curl -L -s -o /dev/null -w "%{http_code}" "$URL")
+
+          echo "Website HTTP status: $STATUS"
+
+          if [ "$STATUS" -ne 200 ]; then
+            echo "Website health check failed!"
+            exit 1
+          fi
+
+          echo "CampusConnect website is live and accessible!"
