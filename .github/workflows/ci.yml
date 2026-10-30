@@ -26,7 +26,7 @@ jobs:
           test -f book-appointment.html
           test -f my-appointments.html
           test -f js/app.js
-          test -f css2/style.css
+          test -f css/style.css
           test -f tests/app.test.js
 
       - name: Set up Node.js
