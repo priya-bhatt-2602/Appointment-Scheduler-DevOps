@@ -4,6 +4,7 @@
 **Course:** DevOps  
 **Repository:** [CampusConnect – GitHub](https://github.com/priya-bhatt-2602/Appointment-Scheduler-DevOps)  
 **Live Application:** [CampusConnect](https://priya-bhatt-2602.github.io/Appointment-Scheduler-DevOps/)
+**Versel deployed:** [https://campusconnect-five-xi.vercel.app/#home]
 
 ---
 
